@@ -12,11 +12,17 @@ fi
 CWD="$(realpath "$CWD")"
 echo "cwd: $CWD"
 
+BUILDCONFIG="build.config.gki.aarch64"
+
 LLVM_DIR="/usr/lib/llvm-14"
 LLVM_BIN="$LLVM_DIR/bin"
 
-PATH="$PATH:$LLVM_BIN"
+PATH="$LLVM_BIN:$PATH"
 echo "PATH: $PATH"
+
+echo "testing llvm..."
+clang --version
+ld.lld --version
 
 BUILD_TARGET=dm3q_kor_singlex
 export MODEL=$(echo ${BUILD_TARGET} | cut -d'_' -f1)
@@ -54,7 +60,7 @@ echo "running config..."
 cd "$CWD" || exit 1
 pushd "$CWD"
 set -a
-source "$CWD/build.config.gki.aarch64" || exit 1
+source "$CWD/$BUILDCONFIG" || exit 1
 set +a
 popd > "/dev/null"
 
