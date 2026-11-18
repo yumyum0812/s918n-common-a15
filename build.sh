@@ -17,24 +17,43 @@ BUILDCONFIG="build.config.gki.aarch64"
 LLVM_DIR="/usr/lib/llvm-14"
 LLVM_BIN="$LLVM_DIR/bin"
 
-PATH="$LLVM_BIN:$PATH"
+TOOLS=(
+  "clang"
+  "ld.lld"
+  "llvm-ar"
+  "llvm-nm"
+  "llvm-objcopy"
+  "llvm-objdump"
+  "llvm-readelf"
+  "llvm-strip"
+)
+
+for tool in "${TOOLS[@]}"; do
+  IS_MISSING=""
+  if [ ! -x "$LLVM_BIN/$tool" ]; then
+    echo "missing: $tool"
+    IS_MISSING="1"
+  fi
+  if [ -n "$IS_MISSING" ]; then
+    echo "some tools missing at: $LLVM_BIN"
+    exit 1
+  fi
+done
+
+export PATH="$LLVM_BIN:$PATH"
 echo "PATH: $PATH"
 
-echo "testing llvm..."
-clang --version
-ld.lld --version
-
-BUILD_TARGET=dm3q_kor_singlex
-export MODEL=$(echo ${BUILD_TARGET} | cut -d'_' -f1)
+BUILD_TARGET="dm3q_kor_singlex"
+export MODEL="$(echo ${BUILD_TARGET} | cut -d'_' -f1)"
 export PROJECT_NAME=${MODEL}
-export REGION=$(echo ${BUILD_TARGET} | cut -d'_' -f2)
-export CARRIER=$(echo ${BUILD_TARGET} | cut -d'_' -f3)
-export TARGET_BUILD_VARIANT=user
+export REGION="$(echo ${BUILD_TARGET} | cut -d'_' -f2)"
+export CARRIER="$(echo ${BUILD_TARGET} | cut -d'_' -f3)"
+export TARGET_BUILD_VARIANT="user"
 
-CHIPSET_NAME=kalama
+CHIPSET_NAME="kalama"
 export ANDROID_BUILD_TOP="$CWD"
-export TARGET_PRODUCT=gki
-export TARGET_BOARD_PLATFORM=gki
+export TARGET_PRODUCT="gki"
+export TARGET_BOARD_PLATFORM="gki"
 
 export ANDROID_PRODUCT_OUT="${ANDROID_BUILD_TOP}/out/target/product/${MODEL}"
 export OUT_DIR="${ANDROID_BUILD_TOP}/out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}"
