@@ -17,6 +17,7 @@
 #define _TRACE_HOOK_MM_H
 
 #include <trace/hooks/vendor_hooks.h>
+#include <linux/rwsem.h>
 
 #ifdef __GENKSYMS__
 #include <linux/types.h>
@@ -453,6 +454,7 @@ DECLARE_HOOK(android_vh_filemap_map_pages_range,
 	TP_PROTO(struct file *file, pgoff_t orig_start_pgoff,
 		pgoff_t last_pgoff, vm_fault_t ret),
 	TP_ARGS(file, orig_start_pgoff, last_pgoff, ret));
+
 #endif /* _TRACE_HOOK_MM_H */
 
 /* This part must be outside protection */
