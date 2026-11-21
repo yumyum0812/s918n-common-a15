@@ -22,7 +22,7 @@ jobs:
 
             wget -q https://llvm.org/llvm.sh
             chmod +x llvm.sh
-            ./llvm.sh 14 all
+            sudo ./llvm.sh 14 all
             rm -f llvm.sh
 
             clang --version
