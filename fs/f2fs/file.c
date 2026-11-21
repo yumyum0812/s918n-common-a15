@@ -2422,12 +2422,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
 		/* Set the COW inode's atomic_inode to the atomic inode */
 		F2FS_I(fi->cow_inode)->atomic_inode = inode;
 	} else {
+		struct f2fs_inode_info *cow_fi = F2FS_I(fi->cow_inode);
+		
 		/* Reuse the already created COW inode */
 		f2fs_bug_on(sbi, get_dirty_pages(fi->cow_inode));
 
 		invalidate_mapping_pages(fi->cow_inode->i_mapping, 0, -1);
-
-		struct f2fs_inode_info *cow_fi = F2FS_I(fi->cow_inode);
 
 		f2fs_down_write(&cow_fi->i_gc_rwsem[WRITE]);
 		ret = f2fs_do_truncate_blocks(fi->cow_inode, 0, true);

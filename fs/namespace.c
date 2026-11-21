@@ -2488,6 +2488,10 @@ static int attach_recursive_mnt(struct mount *source_mnt,
 	struct hlist_node *n;
 	int err;
 
+#ifdef CONFIG_KDP_NS
+	int nsflags;
+#endif
+
 	/*
 	 * A caller in an unprivileged mount namespaces may trigger an
 	 * automount and propagate locked mounts into privileged mount
@@ -2508,11 +2512,11 @@ static int attach_recursive_mnt(struct mount *source_mnt,
 	 * to be tucked under other mounts.
 	 */
 #ifdef CONFIG_KDP_NS
-	int nsflags;
 	smp = get_mountpoint(((struct kdp_mount *)source_mnt)->mnt->mnt_root);
 #else
 	smp = get_mountpoint(source_mnt->mnt.mnt_root);
 #endif
+
 	if (IS_ERR(smp))
 		return PTR_ERR(smp);
 

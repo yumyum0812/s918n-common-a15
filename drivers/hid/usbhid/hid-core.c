@@ -288,6 +288,7 @@ static void hid_irq_in(struct urb *urb)
 #ifdef CONFIG_USB_DEBUG_DETAILED_LOG
 			status = hid_safe_input_report(urb->context, HID_INPUT_REPORT,
 					 urb->transfer_buffer,
+					 urb->transfer_buffer_length,
 					 urb->actual_length, 1);
 			if (status == 0) {
 				if (usbhid->in_err_isr) {
@@ -306,6 +307,7 @@ static void hid_irq_in(struct urb *urb)
 #else
 			hid_safe_input_report(urb->context, HID_INPUT_REPORT,
 					 urb->transfer_buffer,
+					 urb->transfer_buffer_length,
 					 urb->actual_length, 1);
 #endif
 			/*

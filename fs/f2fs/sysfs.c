@@ -1263,7 +1263,8 @@ static struct f2fs_attr f2fs_attr_##_name = {			\
 #define F2FS_RW_ATTR_640(struct_type, struct_name, name, elname)	\
 	F2FS_ATTR_OFFSET(struct_type, name, 0640,		\
 		f2fs_sbi_show, f2fs_sbi_store,			\
-		offsetof(struct struct_name, elname))
+		offsetof(struct struct_name, elname),       \
+	    sizeof_field(struct struct_name, elname))
 
 #define F2FS_GENERAL_RO_ATTR(name) \
 static struct f2fs_attr f2fs_attr_##name = __ATTR(name, 0444, name##_show, NULL)
@@ -1597,6 +1598,7 @@ static struct attribute *f2fs_feat_attrs[] = {
 	ATTR_LIST(pin_file),
 #ifdef CONFIG_UNICODE
 	ATTR_LIST(linear_lookup),
+#endif
 #ifdef CONFIG_F2FS_SEC_SUPPORT_DNODE_RELOCATION
 	ATTR_LIST(sec_dnode_relocation),
 #endif
