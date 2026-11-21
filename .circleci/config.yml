@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-kernel:
     docker:
-      - image: ubuntu:22.04
+      - image: cimg/base:2024.01
     resource_class: large
     environment:
       DEBIAN_FRONTEND: noninteractive
