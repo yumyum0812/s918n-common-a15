@@ -20,7 +20,8 @@ jobs:
               git kmod cpio python3 python-is-python3 zstd ccache \
               rsync zip unzip curl device-tree-compiler dwarves
 
-            wget -q https://llvm.org/llvm.sh
+            echo "downloading llvm"
+            wget -q https://apt.llvm.org/llvm.sh
             chmod +x llvm.sh
             sudo ./llvm.sh 14 all
             rm -f llvm.sh
