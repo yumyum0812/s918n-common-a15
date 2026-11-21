@@ -1,0 +1,51 @@
+version: 2.1
+
+jobs:
+  build-kernel:
+    docker:
+      - image: ubuntu:22.04
+    resource_class: large
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+      LTO: "thin"
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            apt-get update && apt-get install -y \
+              build-essential bc bison flex libssl-dev libelf-dev \
+              wget lsb-release software-properties-common gnupg \
+              git kmod cpio python3 python-is-python3 zstd ccache \
+              rsync zip unzip curl device-tree-compiler dwarves
+
+            wget -q https://llvm.org/llvm.sh
+            chmod +x llvm.sh
+            ./llvm.sh 14 all
+            rm -f llvm.sh
+
+            clang --version
+            ld.lld --version
+
+      - run:
+          name: Build Kernel
+          no_output_timeout: 45m
+          command: |
+            chmod +x ./build.sh
+            LTO=thin ./build.sh
+
+      - run:
+          name: Collect Artifacts
+          command: |
+            mkdir -p /tmp/artifacts
+            find ./out -maxdepth 3 \( -name "*.zip" -o -name "Image*" -o -name "*.tar*" \) -exec cp -v {} /tmp/artifacts/ \; || true
+
+      - store_artifacts:
+          path: /tmp/artifacts
+          destination: kernel-output
+
+workflows:
+  build:
+    jobs:
+      - build-kernel
