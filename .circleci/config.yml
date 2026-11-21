@@ -26,9 +26,9 @@ jobs:
             sudo ./llvm.sh 14 all
             rm -f llvm.sh
 
-            ls -l /usr/lib/llvm-14
-            /usr/lib/llvm-14/clang --version
-            /usr/lib/llvm-14/ld.lld --version
+            ls -l /usr/lib/llvm-14/bin
+            /usr/lib/llvm-14/bin/clang --version
+            /usr/lib/llvm-14/bin/ld.lld --version
 
       - run:
           name: Build Kernel
